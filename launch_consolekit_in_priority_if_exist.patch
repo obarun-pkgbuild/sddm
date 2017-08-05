@@ -1,0 +1,28 @@
+diff -u a/data/scripts/Xsession b/data/scripts/Xsession
+--- a/data/scripts/Xsession	2016-08-28 15:54:03.000000000 +0400
++++ b/data/scripts/Xsession	2016-09-02 12:03:16.201397937 +0400
+@@ -91,5 +91,9 @@
+ if [ -z "$@" ]; then
+     exec xmessage -center -buttons OK:0 -default OK "Sorry, $DESKTOP_SESSION is no valid session."
+ else
+-    exec $@
++	if [ -x /usr/bin/ck-launch-session ]; then
++		exec ck-launch-session $@
++	else
++		exec $@
++	fi
+ fi
+diff -u a/data/scripts/wayland-session b/data/scripts/wayland-session
+--- a/data/scripts/wayland-session	2016-08-28 15:54:03.000000000 +0400
++++ b/data/scripts/wayland-session	2016-09-02 12:04:14.857786594 +0400
+@@ -43,5 +43,8 @@
+     [ -f $HOME/.profile ] && . $HOME/.profile
+     ;;
+ esac
+-
+-exec $@
++if [ -x /usr/bin/ck-launch-session ]; then
++	exec ck-launch-session $@
++else
++	exec $@
++fi
