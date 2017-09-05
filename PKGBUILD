@@ -4,8 +4,8 @@
 # 						Contributor: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=sddm
-pkgver=0.14.0
-pkgrel=5
+pkgver=0.15.0
+pkgrel=3
 pkgdesc='QML based X11 and Wayland display manager'
 arch=(x86_64)
 url='http://github.com/sddm/sddm'
@@ -23,24 +23,19 @@ backup=('usr/share/sddm/scripts/Xsetup'
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/${pkgname}/${pkgname}/archive/v${pkgver}.tar.gz"
 		"launch_consolekit_in_priority_if_exist.patch"
 		'sddm.conf'
-		sddm-fix-avatars.patch::"https://github.com/sddm/sddm/commit/ecb903e4.patch"
-		sddm-qt-im-module.patch::"https://github.com/sddm/sddm/commit/10352e08.patch")
-sha256sums=('a551551a6ba324e9c384c89bc63e871de65fea3740eadbea2d63df86045f8205'
+		'sddm.sysusers'
+		'sddm.tmpfiles')
+sha256sums=('7a84089b2e424097664bf7cfb24bdc5896ba0eebf8d54eb77bcac6d16db1e358'
             '6866671b41d6390534659b7da97ebf374b9be2b04cfc8464aa2f681a18ca8007'
             '5136b2bdc43a1e79b14c2cd44c90b25b0e9d164ceb1608cb7558668457f3a533'
-            'a2bcdc20bb8915ed4eae810832266ff3bd22a523813ef1674eb25a28800e4368'
-			'3810d2e9360fd96760165e2f7cabaa0579f55d92fdd53579aafdd17c944353a2')
+            '421d6d137a32b7a749427f4ab770e5adeef7dac66b138ab6e216ddc0cf4e2cb6'
+            'db625f2a3649d6d203e1e1b187a054d5c6263cadf7edd824774d8ace52219677')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
 
 prepare() {
   mkdir -p build
   cd "${srcdir}"/${pkgname}-${pkgver}
   patch -Np1 -i ../launch_consolekit_in_priority_if_exist.patch
-  # Fix displaying avatars
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -p1 -i ../sddm-fix-avatars.patch
-  # Fix displaying virtual keyboard
-  patch -p1 -i ../sddm-qt-im-module.patch
 }
 
 build() {
@@ -60,4 +55,7 @@ package() {
   make DESTDIR="${pkgdir}" install
   
   install -Dm0644 "${srcdir}"/sddm.conf "${pkgdir}"/etc/sddm.conf
+
+  install -Dm644 "$srcdir"/sddm.sysusers "$pkgdir"/usr/lib/sysusers.d/sddm.conf
+  install -Dm644 "$srcdir"/sddm.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/sddm.conf
 }
