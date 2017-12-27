@@ -5,7 +5,7 @@
 
 pkgname=sddm
 pkgver=0.17.0
-pkgrel=3
+pkgrel=5
 pkgdesc='QML based X11 and Wayland display manager'
 arch=(x86_64)
 url='http://github.com/sddm/sddm'
@@ -59,5 +59,7 @@ package() {
   install -Dm644 "$srcdir"/sddm.sysusers "$pkgdir"/usr/lib/sysusers.d/sddm.conf
   install -Dm644 "$srcdir"/sddm.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/sddm.conf
   
+  # Set PATH in sddm.conf
+  sed -r 's|DefaultPath=.*|DefaultPath=/usr/local/sbin:/usr/local/bin:/usr/bin|g' -i "$pkgdir"/usr/lib/sddm/sddm.conf.d/sddm.conf
 
 }
