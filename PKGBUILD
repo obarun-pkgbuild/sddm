@@ -5,16 +5,14 @@
 
 pkgname=sddm
 pkgver=0.17.0
-pkgrel=5
+pkgrel=6
 pkgdesc='QML based X11 and Wayland display manager'
 arch=(x86_64)
 url='http://github.com/sddm/sddm'
 license=('GPL')
 depends=('qt5-declarative' 'xorg-xauth' 'xorg-server')
 makedepends=('extra-cmake-modules' 'python-docutils' 'qt5-tools' 'libdbus')
-optdepends=('sddm-s6serv: sddm s6 service'
-			'sddm-s6rcserv: sddm s6-rc service'
-			'sddm-runitserv: sddm runit service')
+
 provides=('display-manager')
 install="${pkgname}.install"
 backup=('usr/share/sddm/scripts/Xsetup'
@@ -62,4 +60,6 @@ package() {
   # Set PATH in sddm.conf
   sed -r 's|DefaultPath=.*|DefaultPath=/usr/local/sbin:/usr/local/bin:/usr/bin|g' -i "$pkgdir"/usr/lib/sddm/sddm.conf.d/sddm.conf
 
+  # Unset InputMethod https://github.com/sddm/sddm/issues/952
+  sed -e "/^InputMethod/s/qtvirtualkeyboard//" -i "$pkgdir"/usr/lib/sddm/sddm.conf.d/sddm.conf
 }
