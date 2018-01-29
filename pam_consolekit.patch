@@ -1,0 +1,8 @@
+diff -Nuar -ura --color a/services/sddm.pam b/services/sddm.pam
+--- a/services/sddm.pam	2017-12-06 03:00:16.000000000 +1100
++++ b/services/sddm.pam	2018-01-29 17:51:38.532706240 +1100
+@@ -13,3 +13,4 @@
+ session		include		system-login
+ -session		optional	pam_gnome_keyring.so auto_start
+ -session  optional  pam_kwallet5.so auto_start
++session		optional	pam_ck_connector.so nox11

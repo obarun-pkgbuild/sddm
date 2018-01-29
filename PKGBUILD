@@ -5,7 +5,7 @@
 
 pkgname=sddm
 pkgver=0.17.0
-pkgrel=6
+pkgrel=7
 pkgdesc='QML based X11 and Wayland display manager'
 arch=(x86_64)
 url='http://github.com/sddm/sddm'
@@ -20,11 +20,13 @@ backup=('usr/share/sddm/scripts/Xsetup'
         'usr/lib/sddm/sddm.conf.d/sddm.conf')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/${pkgname}/${pkgname}/archive/v${pkgver}.tar.gz"
 		"launch_consolekit_in_priority_if_exist.patch"
+		"pam_consolekit.patch"
 		'sddm.conf'
 		'sddm.sysusers'
 		'sddm.tmpfiles')
 sha256sums=('c6da2862688d21a091f1568b78a5f5900cd2e02a83dd42c016f0c5867e69a92d'
             '6866671b41d6390534659b7da97ebf374b9be2b04cfc8464aa2f681a18ca8007'
+            '1123aaa2f58de3936fcab6157a8e31f6afc505f4ea7549529f08501d4dd81a17'
             'dee52b1139674640982698b4276302bad9535c5854068a1401a077aad83cc7b5'
             '9fce66f325d170c61caed57816f4bc72e9591df083e89da114a3bb16b0a0e60f'
             'db625f2a3649d6d203e1e1b187a054d5c6263cadf7edd824774d8ace52219677')
@@ -34,6 +36,7 @@ prepare() {
   mkdir -p build
   cd "${srcdir}"/${pkgname}-${pkgver}
   patch -Np1 -i ../launch_consolekit_in_priority_if_exist.patch
+  patch -p1 -i ../pam_consolekit.patch
 }
 
 build() {
